@@ -1,44 +1,187 @@
-# genai-ollama-chatbot
+# 🚀 Ollama GenAI Console Assistant — `ollama_console_chat.py`
 
-Simple GenAI chatbot using Ollama and Python.
-It runs locally and allows users to ask questions and receive AI-generated answers.
+A simple interactive GenAI console application built using **Python + Ollama (Local LLM)**.
 
-# Tech Stack
+This script:
 
-Python
-Ollama (local LLM runtime)
-Mistral model and other models if required
-Git and GitHub
+- ✅ Uses a proper SYSTEM_PROMPT
+- ✅ Prevents crashes on API failure
+- ✅ Handles timeout safely
+- ✅ Uses safe `.get()` dictionary access
+- ✅ Uses lightweight `phi` model (2–3B)
 
-# What This Project Does
+---
 
-Takes a user question from the terminal
-Sends it to a local AI model
-Returns an AI-generated response
-Uses a system prompt to control AI behavior
+# 🧠 What This Application Does
 
-# Verify Ollama Setup
+This application:
 
-Check that Ollama is running
-Confirm the Mistral model is available
-Test the model from the terminal
+1. Connects to the local Ollama REST API
+2. Uses the `phi` small language model
+3. Applies a system role:
+   > _"You are a senior Java Spring Boot developer."_
+4. Accepts user questions from the console
+5. Returns concise AI-generated answers
+6. Runs continuously until the user types `exit`
 
-# Run the Application
+---
 
-Run the Python file
-Start asking questions in the terminal
-Type exit to stop the program
+# 🏗 Architecture Overview
 
-# Prompt Design Used in This Project
+User Input (Console)
+↓
+Python Script (requests)
+↓
+Ollama REST API (localhost:11434)
+↓
+phi Model (Local LLM)
+↓
+AI Response → Console Output
 
-A system prompt is used to guide the AI’s behavior.
+---
+
+# ⚙️ Prerequisites
+
+- Windows 10 / 11 (or macOS / Linux)
+- Python 3.8+
+- Ollama installed and running
+- `requests` Python package
+- `phi` model installed locally
+
+---
+
+# 1️⃣ Install Ollama
+
+After installation, verify it is running:
+
+http://localhost:11434/
+
+You should see:
+
+Ollama is running
+
+---
+
+# 2️⃣ Install the `phi` Model
+
+Open PowerShell and run:
+
+```powershell
+ollama pull phi
+Verify installation:
+
+ollama list
+Expected output:
+
+phi
+3️⃣ Setup Python Virtual Environment
+Navigate to your project directory:
+
+cd C:\path\to\your\project
+Create virtual environment:
+
+python -m venv venv
+Activate it:
+
+.\venv\Scripts\Activate.ps1
+Install dependencies:
+
+pip install --upgrade pip
+pip install requests
+Optional requirements.txt:
+
+requests
+Install using:
+
+pip install -r requirements.txt
+4️⃣ Run the Application
+Ensure:
+
+Ollama is running
+
+phi model is installed
+
+Virtual environment is activated
+
+Run:
+
+python ollama_console_chat.py
+You will see:
+
+Ask something (type 'exit' to quit):
 Example:
-The AI is instructed to behave like a senior Java Spring Boot developer
-Responses are clear and concise
-This helps generate consistent and relevant answers.
 
-# Learning Outcomes
+Ask something (type 'exit' to quit): What is dependency injection?
+Output:
 
-How GenAI applications work in real systems
-How to communicate with LLMs using APIs
-How prompt engineering affects AI output
+AI: Dependency Injection is a design pattern where dependencies are provided externally instead of being created inside the class.
+Type exit to stop the program.
+
+🔎 Technical Breakdown
+📡 API Endpoint Used
+http://localhost:11434/api/generate
+🤖 Model Used
+phi
+📝 Prompt Structure
+The script combines:
+
+SYSTEM_PROMPT
++
+User Question
++
+Assistant:
+Example final prompt sent to the model:
+
+You are a senior Java Spring Boot developer.
+Answer clearly and concisely.
+
+User: What is REST?
+Assistant:
+This improves response clarity and role alignment.
+
+🛡 Stability & Safety Features
+✅ HTTP Status Validation
+response.raise_for_status()
+Prevents silent HTTP failures.
+
+✅ Safe Dictionary Access
+answer = data.get("response", "No response received.")
+Prevents crashes if response key is missing.
+
+✅ Timeout Handling
+timeout=180
+Prevents hanging API calls.
+
+✅ Exception Handling
+except requests.exceptions.RequestException as e:
+Ensures application does not crash on API failure.
+
+🐛 Troubleshooting
+❌ Connection Refused
+Ensure Ollama is running
+
+Open http://localhost:11434/
+
+Restart Ollama service
+
+❌ Model Not Found
+ollama pull phi
+❌ Slow Response
+Close memory-heavy applications
+
+Reduce:
+
+"num_predict": 200
+❌ Timeout Error
+Increase timeout value:
+
+timeout=300
+📂 Suggested .gitignore
+venv/
+__pycache__/
+*.pyc
+.ollama/
+.env
+Thumbs.db
+.DS_Store
+```
